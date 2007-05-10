@@ -1,0 +1,16 @@
+ShaderSimpler(7) : 实现类似魔兽世界的“全屏泛光”
+
+现在很多游戏，像WOW、激战都有这种“全屏泛光”的画面效果，很多人以为是使用了HDR，其实就是一个post process效果。
+PostProcess是一个很简单又有用的概念，顾名思义，就是把渲染之后的场景，在图像空间进行一些处理。它可以做出各种各样的效果。
+
+全屏泛光的实现步骤如下：
+
+1. 分配三个texture，F,A,B，其中F的大小与back buffer一致，A和B为back buffer面积的四分之一；
+2. 将场景渲染到F；
+3. 将F渲染到A － 执行down sample和high-pass filter；
+4. 将A渲染到B － 执行H blur；
+5. 将B渲染到A － 执行V blur，先横向再纵向计算，把每个象素需要的计算由n*n变为n+n，其中n为blur区域的大小；
+6. 将F和A混合，渲染到back buffer，然后present。至于混合的公式，就可以自己发挥了。：）
+
+参考
+nVidia FXComposer

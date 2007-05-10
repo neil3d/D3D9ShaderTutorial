@@ -1,0 +1,22 @@
+ShaderSimpler(5) : Bump Mapping(Normal mapping)
+
+从贴图生成normal map
+	normal map需要从一个颜色贴图对应的高度图生成。为了计算i,j点的normal，首先可以根据高度差计算出s,t方向的切向量：
+	S(i,j) = <1, 0, aH(i+1,j)-aH(i-1,j)>
+	T(i,j) = <0, 1, aH(i,j+1)-aH(i,j-1)>
+其中a是一个缩放系数。normal可以由这两个切向量得出
+	N(i,j) = normalize(cross(S,T)) ＝ cross(S,T)/length(cross(S,T)) = <-Sz, -Tz, 1> / sqrt(Sz^2 + Tz^2 +1)
+然后可以把这个向量使用RGB编码存储到贴图文件中。原理是这样，本例使用nvidia提供的工具生成normal map。
+
+计算出Tangent space
+	这个计算稍微有些复杂。记得老早的时候nvidia有一个文档写的很清楚，不过我怎么也搜不出来了。哪位要是知道，请给我个链接。在Eric Lengyel的书里面找到了另外一种解法，讲得也很透彻。
+	本例子中简单的调用了D3DXComputeTangent，也可以使用nvidia sdk中提供的nv_meshmender来计算。
+
+光照计算
+	使用Bump map的光照计算与前面的PhongShading例子相比没有什么新鲜的。前面的例子中每个象素的normal只是简单的从顶点normal插值而来，而使用bump map后，每个顶点的normal可以从贴图中查找；另外因为这个normal是存在与tangent space中，所以需要把light dir和view dir都转换到tangent space再进行计算。
+
+
+参考
+Eric Lengyel, 3D游戏与计算机图形学中的数学方法
+Normal Map贴图使用nVidia Photoshop plugin生成 -- http://developer.nvidia.com/object/nv_texture_tools.html
+Wolfgang Engel, Implementing Lighting Models With HLSL -- http://www.gamasutra.com/features/20030418/engel_01.shtml

@@ -1,0 +1,10 @@
+ShaderSimpler(6) : Parallax Mapping
+
+	Parallax map通过简单的计算可以大幅提高per-pixel光照的效果。Parallax map的想法基于一个简单的事实，那就是当我们用一个多边形去表现一个凹凸不平的表面的时候，事实上随着视线的变化，看到的实际的texel并不是顶点uv坐标差值出来的那个结果，而是有一定的偏移。而这个偏移可以通过是个高度图来计算。
+	在本例中，经过简化，最后单个象素uv偏移量的公式为：offset = <viewDir.x, viewDir.y>*(height*SCALE+BIAS)。其中的height就是高度图在这个uv的高度值，然后根据实际需要进行缩放和偏移。SCALE和BIAS可以根据所要渲染的物体的单位来估计，例如要渲染一个1平方米的砖墙，那么我们估计每个砖的起伏在几厘米。在本例中使用这个offset将uv进行偏移之后，再去采样bump map和color map。
+
+	程序运行时按字母键“P”可以打开、关闭parallax map，用来比较效果。：）
+	
+
+参考
+Terry Welsh, Parallax Mapping, ShaderX3 p89
