@@ -1,0 +1,8 @@
+ShaderSimpler(4) : Cube Map 环境映射
+	
+	Cube Map环境映射特别适合与曲面，实现也很简单－－构造一个视点到顶点的向量，然后计算出相对与normal的反射向量，用此向量索引cube map贴图即可。
+	
+	顺便比较了一下shpere环境映射的效果。Sphere环境映射的实现也很简单，把顶点法向量变换到view space，然后使用贴图坐标（n.x/2+0.5,n.y/2+0.5）来索引sphere map贴图即可。
+
+参考：
+DX9SDK simple, HLSL workshop, Goal 3

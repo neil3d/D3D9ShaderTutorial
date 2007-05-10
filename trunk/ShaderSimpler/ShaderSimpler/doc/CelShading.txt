@@ -1,0 +1,9 @@
+ShaderSimpler(3) : 卡通渲染
+	
+	卡通渲染主要包括两个效果：
+	1、把普通光照的平滑亮度变化变成几个强度级别。这是通过计算出光照强调，然后查找一个贴图来实现的，此贴图存储0～1的4个固定段。
+	2、描出轮廓线。法线与视线垂直的点为轮廓，所以使用两者的点积结果来查找一个贴图，然后乘以光照颜色来实现描边，此贴图0附近为全黑，其余为全摆。
+
+参考：
+Keith Lee, Cartoon Rendering with HLSL, http://www.booyah.com/article05-dx9.html
+DX9SDK simple, BasicHLSL

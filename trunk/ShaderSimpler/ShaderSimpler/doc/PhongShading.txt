@@ -1,0 +1,12 @@
+ShaderSimpler(2):Phong shading
+
+	这个小程序通过把顶点法线逐象素插值，再计算每个象素的diffuse，specular光照结果来简单的实现phong模型。因为specular是view depended，所以Effect中增加了eyePos参数。
+	
+	通过观察box的渲染可以看出与basic lighting的明显不同。
+		
+	这段小程序没有考虑性能的问题，为了提升速度，可以ps中的L，V，R放到vs中去计算。
+	
+	镜头操作：WS前后，AD左右，ZX上下移动，鼠标拖动为转动。
+
+参考
+Wolfgang Engel, Implementing Lighting Models With HLSL -- http://www.gamasutra.com/features/20030418/engel_01.shtml
