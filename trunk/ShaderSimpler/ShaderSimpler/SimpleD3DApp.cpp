@@ -9,9 +9,10 @@
 #include "01Lighting\CubeEnvMapping.h"
 #include "01Lighting\BumpMapping.h"
 #include "01Lighting\ParallaxMapping.h"
-#include "01Lighting\DeferredShading.h"
 
 #include "02PostProcess\PostProcessBloom.h"
+
+#include "03Deferred\DS_Basic.h"
 //-----------------------------------------------------------------------------
 SimpleD3DApp simpleApp;
 
@@ -87,12 +88,13 @@ LRESULT CALLBACK WindowProc( HWND   hWnd,
 		case ID_01LIGHTING_PARALLAXMAPPING:
 			simpleApp.openSimple(ESS_ParallaxMapping);
 			break;
-		case ID_01LIGHTING_DEFERREDSHADING:
-			simpleApp.openSimple(ESS_DeferredShading);
-			break;
 		// post process
 		case ID_02POSTPROCESS_BLOOM:
 			simpleApp.openSimple(ESS_PP_Bloom);
+			break;
+		// deferred shading
+		case ID_03DEFERRED_BASICSHADING:
+			simpleApp.openSimple(ESS_DS_Basic);
 			break;
 		//-- view
 		case ID_VIEW_RESETCAMERA:
@@ -345,14 +347,14 @@ void SimpleD3DApp::openSimple(EShaderSimple ess)
 		m_pSimpler = new ParallaxMapping;
 		::SetWindowText(m_hWnd,"Parallax Mapping");
 		break;
-	case ESS_DeferredShading:
-		m_pSimpler = new DeferredShading;
-		::SetWindowText(m_hWnd,"Deferred Shading");
 		break;
 	case ESS_PP_Bloom:
 		m_pSimpler = new PostProcessBloom;
 		::SetWindowText(m_hWnd,"PostProcess -- Bloom");
 		break;
+	case ESS_DS_Basic:
+		m_pSimpler = new DS_Basic;
+		::SetWindowText(m_hWnd,"Deferred Shading [basic]");
 	}
 
 	//--init

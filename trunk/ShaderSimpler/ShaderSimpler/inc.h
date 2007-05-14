@@ -30,7 +30,7 @@
 #define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
 
 //--
-const int clientWidth = 1024;
-const int clientHeight = 768;
+const int clientWidth = 800;
+const int clientHeight = 600;
 
 //#define SHADER_DEBUG

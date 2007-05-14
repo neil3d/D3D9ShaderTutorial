@@ -11,9 +11,10 @@ enum EShaderSimple
 	ESS_CubeEnvMapping,
 	ESS_BumpMapping,
 	ESS_ParallaxMapping,
-	ESS_DeferredShading,
-
+	
 	ESS_PP_Bloom,
+
+	ESS_DS_Basic,
 
 	ESS_End
 };
