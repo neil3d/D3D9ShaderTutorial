@@ -1,15 +1,11 @@
 
 #include "..\shadersimpler.h"
 #include "..\01Lighting\ParallaxMapping.h"
+#include "..\ScreenQuad.h"
 
 
 class PostProcessBloom  : public ShaderSimpler
 {
-	struct Vert
-	{
-		D3DXVECTOR4	pos;
-		D3DXVECTOR2	uv;
-	};
 public:
 	PostProcessBloom(void);
 	virtual ~PostProcessBloom(void);
@@ -34,11 +30,10 @@ private:
 	IDirect3DTexture9	*m_pRTQuarterA;
 	IDirect3DTexture9	*m_pRTQuarterB;
 
-	IDirect3DVertexBuffer9		*m_pQuadVB;
-	IDirect3DVertexDeclaration9	*m_pVertDecl;
-
 	IDirect3DTexture9	*m_pPic;
 	bool				m_bUsePic;
+
+	ScreenQuad			m_screenQuad;
 
 	ParallaxMapping		m_scene;
 };

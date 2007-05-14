@@ -135,6 +135,9 @@
 				RelativePath=".\Shader\CubeEnvMapping.fx">
 			</File>
 			<File
+				RelativePath=".\Shader\DS_Basic.fx">
+			</File>
+			<File
 				RelativePath=".\Shader\ParallaxMapping.fx">
 			</File>
 			<File
@@ -249,6 +252,12 @@
 		</File>
 		<File
 			RelativePath=".\resource.h">
+		</File>
+		<File
+			RelativePath=".\ScreenQuad.cpp">
+		</File>
+		<File
+			RelativePath=".\ScreenQuad.h">
 		</File>
 		<File
 			RelativePath=".\SGITrackball.cpp">
