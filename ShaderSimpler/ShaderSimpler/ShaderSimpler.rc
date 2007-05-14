@@ -63,14 +63,16 @@ BEGIN
         MENUITEM "BumpMapping",                 ID_SIMPLER_BUMPMAPPING
         MENUITEM "ParallaxMapping",             ID_01LIGHTING_PARALLAXMAPPING
 
-        MENUITEM "DeferredShading",             ID_01LIGHTING_DEFERREDSHADING
-
         MENUITEM SEPARATOR
         MENUITEM "Exit",                        IDM_Exit
     END
     POPUP "02PostProcess"
     BEGIN
         MENUITEM "Bloom",                       ID_02POSTPROCESS_BLOOM
+    END
+    POPUP "03Deferred"
+    BEGIN
+        MENUITEM "BasicShading",                ID_03DEFERRED_BASICSHADING
     END
     POPUP "View"
     BEGIN

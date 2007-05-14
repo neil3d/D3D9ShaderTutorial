@@ -135,9 +135,6 @@
 				RelativePath=".\Shader\CubeEnvMapping.fx">
 			</File>
 			<File
-				RelativePath=".\Shader\DeferredShading.fx">
-			</File>
-			<File
 				RelativePath=".\Shader\ParallaxMapping.fx">
 			</File>
 			<File
@@ -200,12 +197,6 @@
 				RelativePath=".\01Lighting\CubeEnvMapping.h">
 			</File>
 			<File
-				RelativePath=".\01Lighting\DeferredShading.cpp">
-			</File>
-			<File
-				RelativePath=".\01Lighting\DeferredShading.h">
-			</File>
-			<File
 				RelativePath=".\01Lighting\ParallaxMapping.cpp">
 			</File>
 			<File
@@ -226,6 +217,16 @@
 			</File>
 			<File
 				RelativePath=".\02PostProcess\PostProcessBloom.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="03Deferred"
+			Filter="">
+			<File
+				RelativePath=".\03Deferred\DS_Basic.cpp">
+			</File>
+			<File
+				RelativePath=".\03Deferred\DS_Basic.h">
 			</File>
 		</Filter>
 		<File
