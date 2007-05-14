@@ -108,8 +108,6 @@ void DS_Basic::render()
 		SetRenderTarget SRT(m_pD3DDevice, m_normalRT);
 		hr = m_pEffect->SetTechnique("init_normal");
 		renderScene();
-
-		hr = D3DXSaveTextureToFile("d:\\pos.dds", D3DXIFF_DDS, m_normalRT, NULL);
 	}
 
 	{
