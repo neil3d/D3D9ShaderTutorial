@@ -15,9 +15,15 @@ public:
 	virtual bool init(IDirect3DDevice9 *pD3DDevice);
 	virtual void render();
 
-private:
+protected:
+	virtual bool createPosRT();
+	virtual void buildGBuffers();
+	virtual const char* getShadingTech();
+	virtual void setEffectTexture();
+
 	void renderScene();
-private:
+
+protected:
 	IDirect3DDevice9*	m_pD3DDevice;
 
 	ID3DXEffect*		m_pEffect;

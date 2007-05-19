@@ -23,6 +23,21 @@ DS_Basic::~DS_Basic(void)
 
 }
 
+bool DS_Basic::createPosRT()
+{
+	HRESULT hr;
+	// create G-Buffers
+	hr = m_pD3DDevice->CreateTexture(clientWidth, clientHeight,
+		1,//mip-map
+		D3DUSAGE_RENDERTARGET,
+		D3DFMT_A16B16G16R16F,
+		D3DPOOL_DEFAULT,
+		&m_posRT,
+		NULL);
+	
+	return SUCCEEDED(hr);
+}
+
 bool DS_Basic::init(IDirect3DDevice9 *pD3DDevice)
 {
 	m_pD3DDevice = pD3DDevice;
@@ -35,22 +50,14 @@ bool DS_Basic::init(IDirect3DDevice9 *pD3DDevice)
 		m_lightPos[i].y = 0;
 	}
 
-	// create effect
+	//-- load effect
 	m_pEffect = DrawingUtil::getInst()->loadEffect(pD3DDevice,"Shader\\DS_Basic.fx");
 	if(m_pEffect == NULL)
 		return false;
 
 	HRESULT hr;
 	// create G-Buffers
-	hr = pD3DDevice->CreateTexture(clientWidth, clientHeight,
-		1,//mip-map
-		D3DUSAGE_RENDERTARGET,
-		D3DFMT_A16B16G16R16F,
-		D3DPOOL_DEFAULT,
-		&m_posRT,
-		NULL);
-	
-	if(FAILED(hr))
+	if(!createPosRT())
 		return false;
 
 	hr = pD3DDevice->CreateTexture(clientWidth, clientHeight,
@@ -81,20 +88,9 @@ bool DS_Basic::init(IDirect3DDevice9 *pD3DDevice)
 	return ShaderSimpler::init(pD3DDevice);
 }
 
-void DS_Basic::render()
+void DS_Basic::buildGBuffers()
 {
-	// 为了能在Geforce 5600上测试，没有使用Multi-Render targets
-
 	HRESULT hr;
-	//-- 设置effect参数
-	D3DXMATRIX matWorld;
-	D3DXMatrixIdentity(&matWorld);
-
-	D3DXMATRIX matWorldViewProj = matWorld * g_camera.getViewMat() * g_camera.getProjectMat();
-
-	m_pEffect->SetMatrix("matWorldViewPrj",&matWorldViewProj);
-	m_pEffect->SetMatrix("matWorld",&matWorld);
-	
 	//-- G-Buffsers
 	{
 		// pos
@@ -116,19 +112,49 @@ void DS_Basic::render()
 		hr = m_pEffect->SetTechnique("init_diffuse");
 		renderScene();
 	}
+}
+
+const char* DS_Basic::getShadingTech()
+{
+	return "shading_fullscreen";
+}
+
+void DS_Basic::setEffectTexture()
+{
+	HRESULT hr;
+
+	hr = m_pEffect->SetTexture("posRT", m_posRT);
+	hr = m_pEffect->SetTexture("normalRT", m_normalRT);
+	hr = m_pEffect->SetTexture("diffuseRT", m_diffuseRT);
+}
+
+void DS_Basic::render()
+{
+	// 为了能在Geforce 5600上测试，没有使用Multi-Render targets
+
+	HRESULT hr;
+	//-- 设置effect参数
+	D3DXMATRIX matWorld;
+	D3DXMatrixIdentity(&matWorld);
+
+	D3DXMATRIX matWorldViewProj = matWorld * g_camera.getViewMat() * g_camera.getProjectMat();
+
+	m_pEffect->SetMatrix("matWorldViewPrj",&matWorldViewProj);
+	m_pEffect->SetMatrix("matWorld",&matWorld);
+
+	buildGBuffers();
+	
 
 	//-- shading
 	hr = m_pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET,
 		D3DCOLOR_COLORVALUE(0.f,0.f,0.f,1.0f), 1.0f, 0 );
 
 	//-- full screen light
-	hr = m_pEffect->SetTechnique("shading_fullscreen");
+	hr = m_pEffect->SetTechnique(getShadingTech());
 	
 	hr = m_pEffect->SetFloatArray("eyePos",(float*)&g_camera.getEyePos(),3);
 
-	hr = m_pEffect->SetTexture("posRT", m_posRT);
-	hr = m_pEffect->SetTexture("normalRT", m_normalRT);
-	hr = m_pEffect->SetTexture("diffuseRT", m_diffuseRT);
+	setEffectTexture();
 
 	float t = timeGetTime()/1000.0f;
 	float r = 150;

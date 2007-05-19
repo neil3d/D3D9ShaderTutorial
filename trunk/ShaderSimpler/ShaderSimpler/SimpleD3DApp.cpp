@@ -13,6 +13,7 @@
 #include "02PostProcess\PostProcessBloom.h"
 
 #include "03Deferred\DS_Basic.h"
+#include "03Deferred\DS_Basic_MRT.h"
 //-----------------------------------------------------------------------------
 SimpleD3DApp simpleApp;
 
@@ -95,6 +96,9 @@ LRESULT CALLBACK WindowProc( HWND   hWnd,
 		// deferred shading
 		case ID_03DEFERRED_BASICSHADING:
 			simpleApp.openSimple(ESS_DS_Basic);
+			break;
+		case ID_03DEFERRED_BASICSHADING_MRT:
+			simpleApp.openSimple(ESS_DS_Basic_MRT);
 			break;
 		//-- view
 		case ID_VIEW_RESETCAMERA:
@@ -355,6 +359,11 @@ void SimpleD3DApp::openSimple(EShaderSimple ess)
 	case ESS_DS_Basic:
 		m_pSimpler = new DS_Basic;
 		::SetWindowText(m_hWnd,"Deferred Shading [basic]");
+		break;
+	case ESS_DS_Basic_MRT:
+		m_pSimpler = new DS_Basic_MRT;
+		::SetWindowText(m_hWnd,"Deferred Shading [basic with MRT]");
+		break;
 	}
 
 	//--init

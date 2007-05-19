@@ -15,6 +15,7 @@ enum EShaderSimple
 	ESS_PP_Bloom,
 
 	ESS_DS_Basic,
+	ESS_DS_Basic_MRT,
 
 	ESS_End
 };
