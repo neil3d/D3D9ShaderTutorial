@@ -73,6 +73,8 @@ BEGIN
     POPUP "03Deferred"
     BEGIN
         MENUITEM "BasicShading",                ID_03DEFERRED_BASICSHADING
+        MENUITEM "BasicShading with MRT",       ID_03DEFERRED_BASICSHADING_MRT
+
     END
     POPUP "View"
     BEGIN

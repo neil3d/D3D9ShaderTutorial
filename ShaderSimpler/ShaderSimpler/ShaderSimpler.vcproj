@@ -231,6 +231,12 @@
 			<File
 				RelativePath=".\03Deferred\DS_Basic.h">
 			</File>
+			<File
+				RelativePath=".\03Deferred\DS_Basic_MRT.cpp">
+			</File>
+			<File
+				RelativePath=".\03Deferred\DS_Basic_MRT.h">
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\00Readme.txt">

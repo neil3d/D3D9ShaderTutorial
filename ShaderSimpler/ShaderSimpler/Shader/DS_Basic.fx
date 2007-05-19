@@ -70,6 +70,38 @@ technique init_diffuse
 }
 
 //----------------------------------------------------------------------------------------
+struct PS_OUTPUT_MRT
+{
+	float4 posXY : COLOR0;
+	float4 posZ : COLOR1;
+	float4 normal : COLOR2;
+	float4 diffuse : COLOR3;
+};
+
+PS_OUTPUT_MRT init_mrt_ps(float4 worldPos : TEXCOORD0,
+						  float4 normal : TEXCOORD1)
+{
+	PS_OUTPUT_MRT ret;
+	
+	ret.posXY.rgba = worldPos.xyzw;
+	ret.posZ.rgba = worldPos.zxyw;
+	
+	ret.normal = 0.5f*(normal+1);
+	ret.diffuse = mtlDiffuseColor;
+	
+	return ret;
+}
+
+technique init_mrt
+{
+	pass p0
+	{
+		VertexShader = compile vs_1_1 init_vs();
+		PixelShader = compile ps_2_0 init_mrt_ps();
+	}
+}
+
+//----------------------------------------------------------------------------------------
 float3 lightPos;
 float3 eyePos = float3(0,200,400);
 
@@ -154,5 +186,59 @@ technique shading_fullscreen
 		
 		VertexShader = compile vs_1_1 quad_vs();
 		PixelShader = compile ps_2_0 shading_ps();
+	}
+}
+
+//---------------------------------------------------------
+texture posRT_Z;
+
+sampler PosZSampler =  sampler_state
+{
+	texture = <posRT_Z>;
+};
+
+float4 shading_ps_mrt(float2 uv  : TEXCOORD0) : COLOR0
+{
+	float3 pos;
+	pos.xy = tex2D(PosSampler, uv).rg;
+	pos.z = tex2D(PosZSampler, uv).r;
+	
+	float3 normal = tex2D(NormalSampler, uv);
+	float4 diffuse = tex2D(DiffuseSampler, uv);
+	
+	normal = normalize(2*normal-1);
+	
+	float3 lightDir = lightPos - pos;
+	float3 L = normalize(lightDir);
+	
+	float d = saturate(dot(normal, L));
+	
+	d += 0.05f; //ambient
+	
+	float4 color = diffuse*d;
+	
+	//--
+	float3 V = normalize(pos - eyePos);
+	float3 R = reflect(L, normal);
+	
+	float specular = pow(saturate(dot(R,V)),8)*d;
+	color += float4(specular,specular,specular,0) * length(diffuse);
+	
+	return color;
+}
+
+technique shading_fullscreen_mrt
+{
+	pass p0
+	{
+		ZWriteEnable = false;
+		ZFunc = Always;
+		
+		AlphaBlendEnable = true;
+		SrcBlend = one;
+		DestBlend = one;
+		
+		VertexShader = compile vs_1_1 quad_vs();
+		PixelShader = compile ps_2_0 shading_ps_mrt();
 	}
 }
