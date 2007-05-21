@@ -146,14 +146,8 @@ sampler DiffuseSampler =  sampler_state
 	texture = <diffuseRT>;
 };
 
-float4 shading_ps(float2 uv  : TEXCOORD0) : COLOR0
+float4 basic_light(float3 pos, float3 normal, float4 diffuse)
 {
-	float3 pos = tex2D(PosSampler, uv);
-	float3 normal = tex2D(NormalSampler, uv);
-	float4 diffuse = tex2D(DiffuseSampler, uv);
-	
-	normal = normalize(2*normal-1);
-	
 	float3 lightDir = lightPos - pos;
 	float3 L = normalize(lightDir);
 	
@@ -171,6 +165,18 @@ float4 shading_ps(float2 uv  : TEXCOORD0) : COLOR0
 	color += float4(specular,specular,specular,0) * length(diffuse);
 	
 	return color;
+}
+
+float4 shading_ps(float2 uv  : TEXCOORD0) : COLOR0
+{
+	float3 pos = tex2D(PosSampler, uv);
+	
+	float3 normal = tex2D(NormalSampler, uv);
+	normal = normalize(2*normal-1);
+	
+	float4 diffuse = tex2D(DiffuseSampler, uv);
+	
+	return basic_light(pos, normal, diffuse);
 }
 
 technique shading_fullscreen
@@ -204,27 +210,11 @@ float4 shading_ps_mrt(float2 uv  : TEXCOORD0) : COLOR0
 	pos.z = tex2D(PosZSampler, uv).r;
 	
 	float3 normal = tex2D(NormalSampler, uv);
-	float4 diffuse = tex2D(DiffuseSampler, uv);
-	
 	normal = normalize(2*normal-1);
 	
-	float3 lightDir = lightPos - pos;
-	float3 L = normalize(lightDir);
+	float4 diffuse = tex2D(DiffuseSampler, uv);
 	
-	float d = saturate(dot(normal, L));
-	
-	d += 0.05f; //ambient
-	
-	float4 color = diffuse*d;
-	
-	//--
-	float3 V = normalize(pos - eyePos);
-	float3 R = reflect(L, normal);
-	
-	float specular = pow(saturate(dot(R,V)),8)*d;
-	color += float4(specular,specular,specular,0) * length(diffuse);
-	
-	return color;
+	return basic_light(pos, normal, diffuse);
 }
 
 technique shading_fullscreen_mrt
